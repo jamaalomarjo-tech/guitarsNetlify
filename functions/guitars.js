@@ -23,6 +23,28 @@ exports.handler = async (event) => {
         };
     }
 
+    if (httpMethod === 'DELETE') {
+        const { id } = event.queryStringParameters;
+
+        const guitarIndex = guitars.findIndex(
+            guitar => guitar.id === id
+        );
+
+        if (guitarIndex === -1) {
+            return {
+                statusCode: 404,
+                body: JSON.stringify({ error: 'Guitar not found' })
+            };
+        }
+
+        const deletedGuitar = guitars.splice(guitarIndex, 1)[0];
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify(deletedGuitar)
+        };
+    }
+
     // Handle unsupported methods
     return {
         statusCode: 405,
